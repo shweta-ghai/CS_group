@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from random import randrange
 from typing import List
 
 
@@ -73,9 +72,7 @@ class Server(ServerSubject):
                 print("Make sure your UserName is at lest 4 letters")
                 continue
             elif ' ' in self.UserName:
-                print("xxx")
                 self.UserName = self.UserName.replace(" ", "_")
-                print(self.UserName)
     
             self.Email = input("Enter a Emailid: ")
             
