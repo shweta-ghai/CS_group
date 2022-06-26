@@ -3,7 +3,32 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import List
 
+class ClientData:
 
+     def __init__(self):
+         self._name = ""
+         self._email =""
+       
+     def get_name(self):
+         return self._name
+       
+     def set_name(self, a):
+         self._name = a
+
+     def del_name(self):
+         del self._name
+         
+     def get_email(self):
+         return self._email
+       
+     def set_email(self, a):
+         self._email = a
+
+     def del_email(self):
+         del self._email
+     
+     name = property(get_name, set_name, del_name)
+     email = property(get_email, set_email, del_email)
     
 class ServerSubject(ABC):
     """
@@ -36,9 +61,8 @@ class Server(ServerSubject):
     """
     The Server receive some clientData from user and notifies clients.
     """
+    Cdata = ClientData()
 
-    UserName: String = None
-    Email: String = None
         
     _clients: List[Client] = []
 
@@ -59,7 +83,7 @@ class Server(ServerSubject):
         Trigger an update in each subscriber.
         """
 
-        print("Subject: Notifying clients...")
+        print("Subject: Server Notifying clients...")
         for client in self._clients:
             client.update(self)
 
@@ -67,18 +91,19 @@ class Server(ServerSubject):
         import re
 
         while True:
-            self.UserName = input("Enter a UserName: ")
-            if len(self.UserName) < 4:
-                print("Make sure your UserName is at lest 4 letters")
+            a = input("Enter a Name: ")
+            self.Cdata.name = a
+            if len(self.Cdata.name) < 4:
+                print("Make sure your Name is at lest 4 letters")
                 continue
-            elif ' ' in self.UserName:
-                self.UserName = self.UserName.replace(" ", "_")
+            elif ' ' in self.Cdata.name:
+                self.Cdata.name = self.Cdata.name.replace(" ", "_")
     
-            self.Email = input("Enter a Emailid: ")
+            self.Cdata.email = input("Enter a Emailid: ")
             
             regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
             
-            if(re.fullmatch(regex, self.Email)):
+            if(re.fullmatch(regex, self.Cdata.email)):
                 print("Valid Email")
                 break
             else:
@@ -101,19 +126,19 @@ class Client(ABC):
 
 
 """
-Concrete Clients react to the updates issued by the Subject they had been
+Concrete Clients react to the updates issued by the Server they had been
 attached to.
 """
 
 
 class ClientA(Client):
     def update(self, subject: ServerSubject) -> None:
-          print("ClientA: Reacted to the event", subject.UserName, subject.Email )
+          print("ClientA: Reacted to the event: ", subject.Cdata.name, subject.Cdata.email )
 
 
 class ClientB(Client):
     def update(self, subject: ServerSubject) -> None:
-         print("ClientB: Reacted to the event",subject.UserName, subject.Email)
+         print("ClientB: Reacted to the event: ",subject.Cdata.name, subject.Cdata.email)
 
 
 if __name__ == "__main__":
